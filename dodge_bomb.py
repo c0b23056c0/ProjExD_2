@@ -123,14 +123,15 @@ def main():
         #こうかとんの移動と表示
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
-        kk_new_img = pg.transform.rotozoom(kk_img, 0, 1.0)
+        kk_new_img = kk_img
         for k,v in dic_mv.items():
             if key_lst[k]:
                 sum_mv[0] += v[0]
                 sum_mv[1] += v[1]
-                dic_rtz = kk_rt(kk_img,sum_mv)
-                kk_new_img = dic_rtz[sum_mv]
-                print(dic_rtz)
+            dic_rtz = kk_rt(kk_img,tuple(sum_mv))
+            kk_new_img = dic_rtz
+            print(dic_rtz)
+            print(tuple(sum_mv))
             """
             pi = kk_rt(k)
             print(pi)
