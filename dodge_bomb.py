@@ -28,6 +28,7 @@ def check_bound(obj_rct:pg.Rect) -> tuple[bool, bool]:
     return yoko, tate
 
 
+
 def kk_rt(img, idouryou):
     """
     こうかとんの回転角度計算用の関数
@@ -75,6 +76,18 @@ def gameover(screen):
     time.sleep(5)
 
 
+def ti():
+    new_lst = []
+    accs = [a for a in range(1,11)]
+
+    for r in range(1, 11):
+        bb_img = pg.Surface((20*r, 20*r))
+        bb_img.set_colorkey((0,0,0))
+        pg.draw.circle(bb_img,(255, 0, 0), (10*r,10*r), 10*r)
+        new_lst.append(bb_img)
+    return accs, new_lst
+
+
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -85,6 +98,8 @@ def main():
     kk_rct = kk_img.get_rect()
     kk_rct.center = 900, 400
     #爆弾の設定
+    accs, new_lst = ti()
+    bom_img = new_lst[0]
     bom_img = pg.Surface((20, 20))
     bom_img.set_colorkey((0, 0, 0))
     pg.draw.circle(bom_img,(255, 0, 0), (10, 10), 10)
@@ -113,10 +128,8 @@ def main():
             if key_lst[k]:
                 sum_mv[0] += v[0]
                 sum_mv[1] += v[1]
-                new_v = (v[0], v[1])
-                print(new_v)
-                dic_rtz = kk_rt(kk_img,new_v)
-                kk_new_img = dic_rtz[new_v]
+                dic_rtz = kk_rt(kk_img,sum_mv)
+                kk_new_img = dic_rtz[sum_mv]
                 print(dic_rtz)
             """
             pi = kk_rt(k)
@@ -128,7 +141,10 @@ def main():
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_new_img, kk_rct)
         #爆弾の移動と表示
-        bom_rct.move_ip(vx,vy)
+        avx = vx * accs[min(tmr//500, 9)]
+        avy = vy * accs[min(tmr//500, 9)]
+        bom_rct.move_ip(avx,avy)
+        bom_img = new_lst[min(tmr//500, 9)]
         screen.blit(bom_img, bom_rct)
         yoko, tate = check_bound(bom_rct)
         if not yoko:
